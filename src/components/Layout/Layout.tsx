@@ -54,7 +54,12 @@ export function Layout({ children }: LayoutProps) {
                   </button>
                 </>
               ) : (
-                <span className="text-sm text-gray-500">Not connected</span>
+                <button
+                  onClick={handleConnect}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+                >
+                  Connect Wallet
+                </button>
               )}
             </div>
           </div>
