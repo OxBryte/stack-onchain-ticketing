@@ -77,6 +77,7 @@ export class ContractService {
 
       const data = (await response.json()) as T;
       console.log("Data:", data);
+      console.log("Data:", data);
       return data as T;
     } catch (error) {
       console.error(`Error in read-only call ${functionName}:`, error);
