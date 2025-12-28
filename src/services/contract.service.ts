@@ -51,12 +51,13 @@ export class ContractService {
     try {
       const network =
         CONTRACT_CONFIG.network === "testnet" ? "testnet" : "mainnet";
-      
+
       // Use Hiro API (more reliable than stacks.co)
-      const apiBase = network === "testnet" 
-        ? "https://api.testnet.hiro.so" 
-        : "https://api.hiro.so";
-      
+      const apiBase =
+        network === "testnet"
+          ? "https://api.testnet.hiro.so"
+          : "https://api.hiro.so";
+
       // API format: /v2/contracts/call-read/{stx_address}/{contract_name}/{function_name}
       const apiUrl = `${apiBase}/v2/contracts/call-read/${CONTRACT_CONFIG.contractAddress}/${CONTRACT_CONFIG.contractName}/${functionName}`;
 
