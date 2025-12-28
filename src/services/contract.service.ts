@@ -283,11 +283,7 @@ export class ContractService {
       const events: Array<{ id: number; info: any } | null> = [];
       const totalEvents = await this.getTotalEvents();
       const startId =
-        startFrom === 0
-          ? totalEvents >= 10
-            ? totalEvents - 9
-            : 1
-          : startFrom;
+        startFrom === 0 ? (totalEvents >= 10 ? totalEvents - 9 : 1) : startFrom;
 
       result.value.forEach((eventOption: any, index: number) => {
         if (eventOption && eventOption.value) {
