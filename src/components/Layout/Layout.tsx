@@ -21,6 +21,12 @@ export function Layout() {
               >
                 TicketChain
               </Link>
+              <Link
+                to="/events"
+                className="text-gray-700 hover:text-indigo-600 transition"
+              >
+                Events
+              </Link>
               {isConnected && (
                 <Link
                   to="/dashboard"
