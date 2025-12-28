@@ -19,7 +19,7 @@ export class ContractService {
    */
   private static async callContract(
     functionName: string,
-    functionArgs: any[]
+    functionArgs: ClarityValue[]
   ): Promise<void> {
     try {
       await openContractCall({
@@ -27,7 +27,7 @@ export class ContractService {
         contractName: CONTRACT_CONFIG.contractName,
         functionName,
         functionArgs,
-        network: CONTRACT_CONFIG.network,
+        network: CONTRACT_CONFIG.network as any,
         onFinish: (data) => {
           console.log("Transaction submitted:", data);
         },
