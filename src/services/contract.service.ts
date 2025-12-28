@@ -45,32 +45,9 @@ export class ContractService {
       const network = CONTRACT_CONFIG.network === "testnet" ? "testnet" : "mainnet";
       const apiUrl = `https://api.${network === "testnet" ? "testnet." : ""}stacks.co/v2/contracts/call-read/${contractId}/${functionName}`;
 
-      const args = functionArgs.map((arg) => {
-        // Convert ClarityValue to JSON format expected by API
-        if (arg.type === 1) {
-          // uintCV
-          return { type: "uint", value: arg.value.toString() };
-        } else if (arg.type === 2) {
-          // intCV
-          return { type: "int", value: arg.value.toString() };
-        } else if (arg.type === 3) {
-          // bufferCV
-          return { type: "buffer", value: arg.value };
-        } else if (arg.type === 4) {
-          // boolCV
-          return { type: "bool", value: arg.value };
-        } else if (arg.type === 5) {
-          // principalCV
-          return { type: "principal", value: arg.value.address };
-        } else if (arg.type === 6) {
-          // stringAsciiCV
-          return { type: "string-ascii", value: arg.value };
-        } else if (arg.type === 7) {
-          // stringUtf8CV
-          return { type: "string-utf8", value: arg.value };
-        }
-        return arg;
-      });
+      // Convert ClarityValue to hex string format
+      const { cvToHex } = await import("@stacks/transactions");
+      const args = functionArgs.map((arg) => cvToHex(arg));
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -84,11 +61,12 @@ export class ContractService {
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      return data.result as T;
+      return data as T;
     } catch (error) {
       console.error(`Error in read-only call ${functionName}:`, error);
       throw error;
