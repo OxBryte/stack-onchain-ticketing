@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { truncateAddress } from "../../utils/address";
 
 interface LayoutProps {
   children: ReactNode;
@@ -44,7 +45,10 @@ export function Layout({ children }: LayoutProps) {
               {isConnected ? (
                 <>
                   <span className="text-sm text-gray-600">
-                    {bns || walletInfo?.addresses[2]?.address || "Connected"}
+                    {bns ||
+                      (walletInfo?.addresses[2]?.address
+                        ? truncateAddress(walletInfo.addresses[2].address)
+                        : "Connected")}
                   </span>
                   <button
                     onClick={handleDisconnect}
