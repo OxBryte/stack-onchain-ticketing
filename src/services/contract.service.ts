@@ -1,4 +1,4 @@
-import { openContractCall } from "@stacks/connect";
+import { ConnectNetwork, openContractCall } from "@stacks/connect";
 import {
   uintCV,
   stringAsciiCV,
@@ -28,7 +28,7 @@ export class ContractService {
         functionName,
         functionArgs,
         network: CONTRACT_CONFIG.network as ConnectNetwork,
-        onFinish: (data) => {
+        onFinish: (data: any) => {
           console.log("Transaction submitted:", data);
         },
         onCancel: () => {
