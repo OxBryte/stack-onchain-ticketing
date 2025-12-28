@@ -19,7 +19,7 @@ export class ContractService {
    */
   private static async callContract(
     functionName: string,
-    functionArgs: ClarityValue[]
+    functionArgs: any[]
   ): Promise<void> {
     try {
       await openContractCall({
