@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import { existsSync } from 'fs';
 
 // Check if we're in a git repository
@@ -18,15 +18,52 @@ function hasChanges() {
   }
 }
 
+function getChangedFiles() {
+  try {
+    const status = execSync('git status --porcelain', { encoding: 'utf-8' });
+    return status
+      .trim()
+      .split('\n')
+      .filter(line => line.trim().length > 0)
+      .map(line => {
+        // Extract filename from git status output (format: "XY filename" or "XY old -> new")
+        const parts = line.trim().split(/\s+/);
+        // Remove the status codes (first 2 characters) and get the filename
+        const filename = parts.slice(1).join(' ').split(' -> ').pop();
+        return filename;
+      })
+      .filter(filename => filename); // Remove empty strings
+  } catch (error) {
+    return [];
+  }
+}
+
 function commitChanges() {
   try {
-    const timestamp = new Date().toISOString();
+    const changedFiles = getChangedFiles();
+    
+    if (changedFiles.length === 0) {
+      console.log('No changes to commit');
+      return;
+    }
+
     execSync('git add -A', { stdio: 'inherit' });
-    execSync(`git commit -m "Auto-commit: ${timestamp}"`, { stdio: 'inherit' });
-    console.log(`✓ Committed at ${timestamp}`);
+    
+    // Create commit message with format "changed (filename)" for each file
+    // Use multiple -m flags which git will join with newlines
+    const commitMessages = changedFiles.map(filename => `changed (${filename})`);
+    const commitArgs = ['commit', ...commitMessages.flatMap(msg => ['-m', msg])];
+    
+    const result = spawnSync('git', commitArgs, { stdio: 'inherit' });
+    
+    if (result.status === 0) {
+      console.log(`✓ Committed: ${changedFiles.length} file(s)`);
+    } else {
+      throw new Error(`Git commit failed with status ${result.status}`);
+    }
   } catch (error) {
     // If commit fails (e.g., no changes to commit), just continue
-    if (error.message.includes('nothing to commit')) {
+    if (error.message.includes('nothing to commit') || error.message.includes('status 1')) {
       console.log('No changes to commit');
     } else {
       console.error('Commit error:', error.message);
