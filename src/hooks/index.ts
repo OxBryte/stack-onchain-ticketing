@@ -19,6 +19,10 @@ export {
   useAdmin,
 } from "./useContractRead";
 
+// All events hook
+export { useAllEvents } from "./useAllEvents";
+export type { EventWithId } from "./useAllEvents";
+
 // Wallet hook
 export { useWallet } from "./useWallet";
 
