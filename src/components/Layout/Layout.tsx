@@ -1,20 +1,14 @@
 import { ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { truncateAddress } from "../../utils/address";
+import { WalletDropdown } from "./WalletDropdown";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
-  const { isConnected, bns, walletInfo, disconnectWallet, connectWallet } = useAuth();
-  const navigate = useNavigate();
-
-  const handleDisconnect = () => {
-    disconnectWallet();
-    navigate("/");
-  };
+  const { isConnected, connectWallet } = useAuth();
 
   const handleConnect = async () => {
     await connectWallet();
@@ -43,20 +37,7 @@ export function Layout({ children }: LayoutProps) {
             </div>
             <div className="flex items-center space-x-4">
               {isConnected ? (
-                <>
-                  <span className="text-sm text-gray-600">
-                    {bns ||
-                      (walletInfo?.addresses[2]?.address
-                        ? truncateAddress(walletInfo.addresses[2].address)
-                        : "Connected")}
-                  </span>
-                  <button
-                    onClick={handleDisconnect}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                  >
-                    Disconnect
-                  </button>
-                </>
+                <WalletDropdown />
               ) : (
                 <button
                   onClick={handleConnect}
