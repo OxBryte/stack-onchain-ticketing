@@ -11,7 +11,7 @@ export function useWallet() {
     bns: "",
   });
 
-  async function connectWallet() {
+  async function connectWallet(): Promise<void> {
     try {
       const connectionResponse: GetAddressesResult = await connect();
 
@@ -42,6 +42,7 @@ export function useWallet() {
     } catch (error) {
       console.error("Failed to connect wallet:", error);
       alert("Failed to connect wallet. Please try again.");
+      throw error;
     }
   }
 
