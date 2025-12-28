@@ -87,13 +87,25 @@ export class ContractService {
 
       if (!response.ok) {
         const errorText = await response.text();
+        console.error(`API Error Response (${response.status}):`, errorText);
         throw new Error(`API error: ${response.status} - ${errorText}`);
       }
 
       const data = (await response.json()) as T;
-      console.log("Data:", data);
       return data as T;
     } catch (error) {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        console.error(
+          `Network error calling ${functionName}. This could be due to:`,
+          "\n1. CORS issues (if running locally)",
+          "\n2. Network connectivity",
+          "\n3. Incorrect API endpoint",
+          "\n4. Contract not deployed or incorrect address"
+        );
+        throw new Error(
+          `Failed to fetch: ${functionName}. Check console for details.`
+        );
+      }
       console.error(`Error in read-only call ${functionName}:`, error);
       throw error;
     }
