@@ -27,7 +27,7 @@ export class ContractService {
         contractName: CONTRACT_CONFIG.contractName,
         functionName,
         functionArgs,
-        network: CONTRACT_CONFIG.network,
+        network: CONTRACT_CONFIG.network as ConnectNetwork,
         onFinish: (data) => {
           console.log("Transaction submitted:", data);
         },
