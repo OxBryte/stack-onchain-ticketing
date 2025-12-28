@@ -217,5 +217,38 @@ export class ContractService {
     ]);
     return result?.value || false;
   }
+
+  /**
+   * Get all events (read-only)
+   * Fetches events by iterating through event IDs
+   */
+  static async getAllEvents(): Promise<Array<{ id: number; info: any }>> {
+    try {
+      const totalEvents = await this.getTotalEvents();
+      const events: Array<{ id: number; info: any }> = [];
+
+      // Fetch events in parallel
+      const promises = [];
+      for (let i = 1; i <= totalEvents; i++) {
+        promises.push(
+          this.getEventInfo(i).then((info) => {
+            if (info && info.value) {
+              return { id: i, info: info.value };
+            }
+            return null;
+          })
+        );
+      }
+
+      const results = await Promise.all(promises);
+      return results.filter((event) => event !== null) as Array<{
+        id: number;
+        info: any;
+      }>;
+    } catch (error) {
+      console.error("Error fetching all events:", error);
+      throw error;
+    }
+  }
 }
 
