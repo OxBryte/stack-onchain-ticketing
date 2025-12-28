@@ -1,4 +1,4 @@
-import { ConnectNetwork, openContractCall } from "@stacks/connect";
+import { openContractCall } from "@stacks/connect";
 import {
   uintCV,
   stringAsciiCV,
@@ -6,7 +6,6 @@ import {
   boolCV,
   someCV,
   noneCV,
-  ClarityValue,
 } from "@stacks/transactions";
 import { getContractIdentifier, CONTRACT_CONFIG } from "../constants/contract";
 import { clarityValueToApiFormat } from "../utils/clarity";
@@ -28,8 +27,8 @@ export class ContractService {
         contractName: CONTRACT_CONFIG.contractName,
         functionName,
         functionArgs,
-        network: CONTRACT_CONFIG.network as ConnectNetwork,
-        onFinish: (data: any) => {
+        network: CONTRACT_CONFIG.network,
+        onFinish: (data) => {
           console.log("Transaction submitted:", data);
         },
         onCancel: () => {
@@ -45,9 +44,9 @@ export class ContractService {
   /**
    * Read-only contract call using Stacks API
    */
-  static async readOnlyCall<T>(
+  static async readOnlyCall<T = any>(
     functionName: string,
-    functionArgs: ClarityValue[]
+    functionArgs: any[]
   ): Promise<T> {
     try {
       const contractId = getContractIdentifier();
