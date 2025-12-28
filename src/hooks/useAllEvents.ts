@@ -20,7 +20,7 @@ export function useAllEvents() {
     setError(null);
     try {
       const allEvents = await ContractService.getAllEvents();
-      
+
       // Parse and format events
       const formattedEvents: EventWithId[] = allEvents.map((event) => {
         if (!event.info) {
@@ -66,4 +66,3 @@ export function useAllEvents() {
 
   return { events, isLoading, error, refetch: fetchAllEvents };
 }
-

@@ -79,9 +79,7 @@ export function Events() {
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">
             No Events Yet
           </h2>
-          <p className="text-gray-600 mb-6">
-            Be the first to create an event!
-          </p>
+          <p className="text-gray-600 mb-6">Be the first to create an event!</p>
           {isConnected && (
             <Link
               to="/create-event"
@@ -225,4 +223,3 @@ export function Events() {
     </div>
   );
 }
-

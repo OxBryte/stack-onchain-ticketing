@@ -25,4 +25,3 @@ export type { EventWithId } from "./useAllEvents";
 
 // Wallet hook
 export { useWallet } from "./useWallet";
-
