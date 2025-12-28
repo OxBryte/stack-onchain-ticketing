@@ -1,13 +1,8 @@
-import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { WalletDropdown } from "./WalletDropdown";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-export function Layout({ children }: LayoutProps) {
+export function Layout() {
   const { isConnected, connectWallet } = useAuth();
 
   const handleConnect = async () => {
@@ -50,7 +45,9 @@ export function Layout({ children }: LayoutProps) {
           </div>
         </div>
       </nav>
-      <main className="w-full">{children}</main>
+      <main className="w-full">
+        <Outlet />
+      </main>
     </div>
   );
 }
