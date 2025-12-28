@@ -46,9 +46,8 @@ export class ContractService {
       const network = CONTRACT_CONFIG.network === "testnet" ? "testnet" : "mainnet";
       const apiUrl = `https://api.${network === "testnet" ? "testnet." : ""}stacks.co/v2/contracts/call-read/${contractId}/${functionName}`;
 
-      // Convert ClarityValue to hex string format
-      const { cvToHex } = await import("@stacks/transactions");
-      const args = functionArgs.map((arg) => cvToHex(arg));
+      // Convert ClarityValue to API format
+      const args = functionArgs.map((arg) => clarityValueToApiFormat(arg));
 
       const response = await fetch(apiUrl, {
         method: "POST",
