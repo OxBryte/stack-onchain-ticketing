@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateEvent } from "../../hooks/useContract";
 import { useAuth } from "../../context/AuthContext";
+import { useAdminCheck } from "../../hooks/useAdminCheck";
 
 export function CreateEvent() {
   const navigate = useNavigate();

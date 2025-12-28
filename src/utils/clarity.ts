@@ -81,4 +81,3 @@ export function clarityValueToApiFormat(cv: any): any {
       return cv;
   }
 }
-

@@ -14,4 +14,3 @@ export const CONTRACT_CONFIG = {
 export const getContractIdentifier = () => {
   return `${CONTRACT_CONFIG.contractAddress}.${CONTRACT_CONFIG.contractName}`;
 };
-

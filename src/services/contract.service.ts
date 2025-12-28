@@ -1,5 +1,12 @@
 import { openContractCall } from "@stacks/connect";
-import { uintCV, stringAsciiCV, principalCV, boolCV, someCV, noneCV } from "@stacks/transactions";
+import {
+  uintCV,
+  stringAsciiCV,
+  principalCV,
+  boolCV,
+  someCV,
+  noneCV,
+} from "@stacks/transactions";
 import { getContractIdentifier, CONTRACT_CONFIG } from "../constants/contract";
 import { clarityValueToApiFormat } from "../utils/clarity";
 
@@ -43,8 +50,11 @@ export class ContractService {
   ): Promise<T> {
     try {
       const contractId = getContractIdentifier();
-      const network = CONTRACT_CONFIG.network === "testnet" ? "testnet" : "mainnet";
-      const apiUrl = `https://api.${network === "testnet" ? "testnet." : ""}stacks.co/v2/contracts/call-read/${contractId}/${functionName}`;
+      const network =
+        CONTRACT_CONFIG.network === "testnet" ? "testnet" : "mainnet";
+      const apiUrl = `https://api.${
+        network === "testnet" ? "testnet." : ""
+      }stacks.co/v2/contracts/call-read/${contractId}/${functionName}`;
 
       // Convert ClarityValue to API format
       const args = functionArgs.map((arg) => clarityValueToApiFormat(arg));
@@ -129,9 +139,7 @@ export class ContractService {
     // Add optional parameters
     args.push(
       params.name ? someCV(stringAsciiCV(params.name)) : noneCV(),
-      params.description
-        ? someCV(stringAsciiCV(params.description))
-        : noneCV(),
+      params.description ? someCV(stringAsciiCV(params.description)) : noneCV(),
       params.venue ? someCV(stringAsciiCV(params.venue)) : noneCV(),
       params.price ? someCV(uintCV(params.price)) : noneCV()
     );
@@ -164,9 +172,10 @@ export class ContractService {
    * Get ticket owner (read-only)
    */
   static async getTicketOwner(ticketId: number): Promise<string | null> {
-    const result = await this.readOnlyCall<{ value: string }>("get-ticket-owner", [
-      uintCV(ticketId),
-    ]);
+    const result = await this.readOnlyCall<{ value: string }>(
+      "get-ticket-owner",
+      [uintCV(ticketId)]
+    );
     return result?.value || null;
   }
 
@@ -174,9 +183,10 @@ export class ContractService {
    * Get event ID for a ticket (read-only)
    */
   static async getTicketEvent(ticketId: number): Promise<number | null> {
-    const result = await this.readOnlyCall<{ value: string }>("get-ticket-event", [
-      uintCV(ticketId),
-    ]);
+    const result = await this.readOnlyCall<{ value: string }>(
+      "get-ticket-event",
+      [uintCV(ticketId)]
+    );
     return result?.value ? parseInt(result.value) : null;
   }
 
@@ -192,7 +202,10 @@ export class ContractService {
    * Get total number of events (read-only)
    */
   static async getTotalEvents(): Promise<number> {
-    const result = await this.readOnlyCall<{ value: string }>("get-total-events", []);
+    const result = await this.readOnlyCall<{ value: string }>(
+      "get-total-events",
+      []
+    );
     return result?.value ? parseInt(result.value) : 0;
   }
 
@@ -200,7 +213,10 @@ export class ContractService {
    * Get total number of tickets (read-only)
    */
   static async getTotalTickets(): Promise<number> {
-    const result = await this.readOnlyCall<{ value: string }>("get-total-tickets", []);
+    const result = await this.readOnlyCall<{ value: string }>(
+      "get-total-tickets",
+      []
+    );
     return result?.value ? parseInt(result.value) : 0;
   }
 
@@ -211,10 +227,10 @@ export class ContractService {
     ticketId: number,
     owner: string
   ): Promise<boolean> {
-    const result = await this.readOnlyCall<{ value: boolean }>("is-ticket-owner", [
-      uintCV(ticketId),
-      principalCV(owner),
-    ]);
+    const result = await this.readOnlyCall<{ value: boolean }>(
+      "is-ticket-owner",
+      [uintCV(ticketId), principalCV(owner)]
+    );
     return result?.value || false;
   }
 
@@ -251,4 +267,3 @@ export class ContractService {
     }
   }
 }
-
