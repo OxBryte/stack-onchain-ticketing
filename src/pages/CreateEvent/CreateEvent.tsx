@@ -49,7 +49,9 @@ export function CreateEvent() {
     if (!formData.date) {
       errors.date = "Date is required";
     } else {
-      const selectedDate = new Date(`${formData.date}T${formData.time || "00:00"}`);
+      const selectedDate = new Date(
+        `${formData.date}T${formData.time || "00:00"}`
+      );
       const now = new Date();
       if (selectedDate <= now) {
         errors.date = "Event date must be in the future";
@@ -124,9 +126,14 @@ export function CreateEvent() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold text-gray-900 mb-8">Create New Event</h1>
+      <h1 className="text-4xl font-bold text-gray-900 mb-8">
+        Create New Event
+      </h1>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-xl shadow-lg p-8"
+      >
         {/* Event Name */}
         <div className="mb-6">
           <label
@@ -171,7 +178,9 @@ export function CreateEvent() {
             placeholder="Describe your event..."
           />
           {formErrors.description && (
-            <p className="mt-1 text-sm text-red-600">{formErrors.description}</p>
+            <p className="mt-1 text-sm text-red-600">
+              {formErrors.description}
+            </p>
           )}
         </div>
 
@@ -327,4 +336,3 @@ export function CreateEvent() {
     </div>
   );
 }
-

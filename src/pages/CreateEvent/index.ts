@@ -1,2 +1,1 @@
 export { CreateEvent } from "./CreateEvent";
-

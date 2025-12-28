@@ -4,10 +4,11 @@
  */
 export const CONTRACT_CONFIG = {
   // Contract address - update this after deployment
-  contractAddress: "SP3YGA4JT7289RWGB9SDXTNRCN2FQCRVFSTRRPN4F.ticketing",
+  // Format: Just the principal address, without the contract name
+  contractAddress: "SP3YGA4JT7289RWGB9SDXTNRCN2FQCRVFSTRRPN4F",
   contractName: "ticketing",
   // Network: 'testnet' or 'mainnet'
-  network: "mainnet",
+  network: "testnet" as "testnet" | "mainnet",
 };
 
 export const getContractIdentifier = () => {
