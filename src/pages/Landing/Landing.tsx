@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -5,11 +6,14 @@ export function Landing() {
   const { connectWallet, isConnected } = useAuth();
   const navigate = useNavigate();
 
-  const handleConnect = async () => {
-    await connectWallet();
+  useEffect(() => {
     if (isConnected) {
       navigate("/dashboard");
     }
+  }, [isConnected, navigate]);
+
+  const handleConnect = async () => {
+    await connectWallet();
   };
 
   return (
