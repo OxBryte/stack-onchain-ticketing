@@ -44,7 +44,7 @@ export class ContractService {
   /**
    * Read-only contract call using Stacks API
    */
-  static async readOnlyCall<T = any>(
+  static async readOnlyCall<T>(
     functionName: string,
     functionArgs: any[]
   ): Promise<T> {
@@ -75,7 +75,7 @@ export class ContractService {
         throw new Error(`API error: ${response.status} - ${errorText}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as T;
       return data as T;
     } catch (error) {
       console.error(`Error in read-only call ${functionName}:`, error);
