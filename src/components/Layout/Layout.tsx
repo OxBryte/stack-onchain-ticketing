@@ -28,12 +28,20 @@ export function Layout() {
                 Events
               </Link>
               {isConnected && (
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 hover:text-indigo-600 transition"
-                >
-                  Dashboard
-                </Link>
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="text-gray-700 hover:text-indigo-600 transition"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/create-event"
+                    className="text-gray-700 hover:text-indigo-600 transition"
+                  >
+                    Create Event
+                  </Link>
+                </>
               )}
             </div>
             <div className="flex items-center space-x-4">
