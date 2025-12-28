@@ -126,6 +126,41 @@ export function CreateEvent() {
     );
   }
 
+  if (isLoadingAdmin) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <p className="mt-4 text-gray-600">Checking admin status...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold text-yellow-800 mb-2">
+              Admin Access Required
+            </h2>
+            <p className="text-yellow-700 mb-2">
+              Only the contract admin can create events.
+            </p>
+            <p className="text-sm text-yellow-600">
+              Current admin: <code className="bg-yellow-100 px-2 py-1 rounded">{adminAddress || "Loading..."}</code>
+            </p>
+          </div>
+          <p className="text-gray-600">
+            If you need to create events, please contact the contract administrator
+            or deploy the contract with your address as the admin.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold text-gray-900 mb-8">

@@ -23,5 +23,8 @@ export {
 export { useAllEvents } from "./useAllEvents";
 export type { EventWithId } from "./useAllEvents";
 
+// Admin check hook
+export { useAdminCheck } from "./useAdminCheck";
+
 // Wallet hook
 export { useWallet } from "./useWallet";
