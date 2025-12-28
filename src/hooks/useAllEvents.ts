@@ -30,26 +30,28 @@ export function useAllEvents() {
       }
 
       // Parse and format events
-      const formattedEvents: EventWithId[] = allEvents.map((event) => {
-        if (!event.info) {
-          return { id: event.id, info: null };
-        }
+      const formattedEvents: EventWithId[] = allEvents
+        .filter((event) => event !== null && event.info !== null)
+        .map((event) => {
+          if (!event || !event.info) {
+            return { id: 0, info: null };
+          }
 
-        const info = event.info;
-        return {
-          id: event.id,
-          info: {
-            name: info.name?.value || "",
-            description: info.description?.value || "",
-            venue: info.venue?.value || "",
-            date: BigInt(info.date?.value || 0),
-            price: BigInt(info.price?.value || 0),
-            "total-tickets": BigInt(info["total-tickets"]?.value || 0),
-            "sold-tickets": BigInt(info["sold-tickets"]?.value || 0),
-            active: info.active?.value || false,
-          },
-        };
-      });
+          const info = event.info;
+          return {
+            id: event.id,
+            info: {
+              name: info.name?.value || "",
+              description: info.description?.value || "",
+              venue: info.venue?.value || "",
+              date: BigInt(info.date?.value || 0),
+              price: BigInt(info.price?.value || 0),
+              "total-tickets": BigInt(info["total-tickets"]?.value || 0),
+              "sold-tickets": BigInt(info["sold-tickets"]?.value || 0),
+              active: info.active?.value || false,
+            },
+          };
+        });
 
       // Filter out null events and sort by date (newest first)
       const validEvents = formattedEvents.filter((e) => e.info !== null);
