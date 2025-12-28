@@ -124,7 +124,7 @@ export class ContractService {
     venue?: string;
     price?: number;
   }): Promise<void> {
-    const args: ClarityValue[] = [uintCV(params.eventId)];
+    const args: any[] = [uintCV(params.eventId)];
 
     // Add optional parameters
     args.push(
