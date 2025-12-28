@@ -7,7 +7,11 @@ import { Dashboard } from "../pages/Dashboard";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout><Outlet /></Layout>,
+    element: (
+      <Layout>
+        <Outlet />
+      </Layout>
+    ),
     children: [
       {
         index: true,
@@ -28,4 +32,3 @@ const router = createBrowserRouter([
 export function AppRouter() {
   return <RouterProvider router={router} />;
 }
-
