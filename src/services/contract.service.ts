@@ -39,7 +39,7 @@ export class ContractService {
    */
   static async readOnlyCall<T = any>(
     functionName: string,
-    functionArgs: ClarityValue[]
+    functionArgs: any[]
   ): Promise<T> {
     try {
       const contractId = getContractIdentifier();
