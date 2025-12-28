@@ -49,12 +49,16 @@ export class ContractService {
     functionArgs: any[]
   ): Promise<T> {
     try {
-      const contractId = getContractIdentifier();
       const network =
         CONTRACT_CONFIG.network === "testnet" ? "testnet" : "mainnet";
-      const apiUrl = `https://api.${
-        network === "testnet" ? "testnet." : ""
-      }stacks.co/v2/contracts/call-read/${contractId}/${functionName}`;
+      
+      // Use Hiro API (more reliable than stacks.co)
+      const apiBase = network === "testnet" 
+        ? "https://api.testnet.hiro.so" 
+        : "https://api.hiro.so";
+      
+      // API format: /v2/contracts/call-read/{stx_address}/{contract_name}/{function_name}
+      const apiUrl = `${apiBase}/v2/contracts/call-read/${CONTRACT_CONFIG.contractAddress}/${CONTRACT_CONFIG.contractName}/${functionName}`;
 
       // Convert ClarityValue to API format
       const args = functionArgs.map((arg) => clarityValueToApiFormat(arg));
