@@ -69,7 +69,7 @@ export function Layout({ children }: LayoutProps) {
           </div>
         </div>
       </nav>
-      <main>{children}</main>
+      <main className="w-full">{children}</main>
     </div>
   );
 }

@@ -17,9 +17,9 @@ export function Landing() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full">
       {/* Hero Section */}
-      <section className="flex items-center justify-center min-h-[80vh] px-4 py-20">
+      <section className="flex items-center justify-center min-h-[80vh] px-4 py-20 w-full">
         <div className="max-w-6xl w-full text-center">
           <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6">
             Welcome to{" "}
