@@ -1,24 +1,8 @@
-import {
-  ClarityValue,
-  uintCV,
-  intCV,
-  bufferCV,
-  boolCV,
-  principalCV,
-  stringAsciiCV,
-  stringUtf8CV,
-  responseOkCV,
-  responseErrorCV,
-  noneCV,
-  someCV,
-  listCV,
-  tupleCV,
-} from "@stacks/transactions";
-
 /**
  * Convert ClarityValue to the format expected by Stacks API
+ * Using any type since ClarityValue type is not directly exported from @stacks/transactions
  */
-export function clarityValueToApiFormat(cv: ClarityValue): any {
+export function clarityValueToApiFormat(cv: any): any {
   switch (cv.type) {
     case 1: // uintCV
       return {

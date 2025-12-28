@@ -1,5 +1,5 @@
 import { openContractCall } from "@stacks/connect";
-import { ClarityValue, uintCV, stringAsciiCV, principalCV, boolCV, someCV, noneCV } from "@stacks/transactions";
+import { uintCV, stringAsciiCV, principalCV, boolCV, someCV, noneCV } from "@stacks/transactions";
 import { getContractIdentifier, CONTRACT_CONFIG } from "../constants/contract";
 import { clarityValueToApiFormat } from "../utils/clarity";
 
@@ -12,7 +12,7 @@ export class ContractService {
    */
   private static async callContract(
     functionName: string,
-    functionArgs: ClarityValue[]
+    functionArgs: any[]
   ): Promise<void> {
     try {
       await openContractCall({
