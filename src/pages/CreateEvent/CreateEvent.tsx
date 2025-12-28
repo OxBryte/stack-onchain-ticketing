@@ -149,12 +149,15 @@ export function CreateEvent() {
               Only the contract admin can create events.
             </p>
             <p className="text-sm text-yellow-600">
-              Current admin: <code className="bg-yellow-100 px-2 py-1 rounded">{adminAddress || "Loading..."}</code>
+              Current admin:{" "}
+              <code className="bg-yellow-100 px-2 py-1 rounded">
+                {adminAddress || "Loading..."}
+              </code>
             </p>
           </div>
           <p className="text-gray-600">
-            If you need to create events, please contact the contract administrator
-            or deploy the contract with your address as the admin.
+            If you need to create events, please contact the contract
+            administrator or deploy the contract with your address as the admin.
           </p>
         </div>
       </div>
