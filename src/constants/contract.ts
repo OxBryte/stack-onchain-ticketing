@@ -8,7 +8,7 @@ export const CONTRACT_CONFIG = {
   contractAddress: "SP3YGA4JT7289RWGB9SDXTNRCN2FQCRVFSTRRPN4F",
   contractName: "ticketing",
   // Network: 'testnet' or 'mainnet'
-  network: "testnet" as "testnet" | "mainnet",
+  network: "mainnet",
 };
 
 export const getContractIdentifier = () => {
