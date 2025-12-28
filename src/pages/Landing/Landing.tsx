@@ -30,14 +30,16 @@ export function Landing() {
           Buy, sell, and manage event tickets securely on the blockchain
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button
-            onClick={handleConnect}
-            className="px-8 py-4 bg-indigo-600 text-white text-lg font-semibold rounded-lg hover:bg-indigo-700 transition shadow-lg hover:shadow-xl"
-          >
-            Connect Wallet to Get Started
-          </button>
-        </div>
+        {!isConnected && (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button
+              onClick={handleConnect}
+              className="px-8 py-4 bg-indigo-600 text-white text-lg font-semibold rounded-lg hover:bg-indigo-700 transition shadow-lg hover:shadow-xl"
+            >
+              Connect Wallet to Get Started
+            </button>
+          </div>
+        )}
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-xl shadow-md">

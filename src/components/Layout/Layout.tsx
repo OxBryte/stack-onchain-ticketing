@@ -7,12 +7,16 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const { isConnected, bns, walletInfo, disconnectWallet } = useAuth();
+  const { isConnected, bns, walletInfo, disconnectWallet, connectWallet } = useAuth();
   const navigate = useNavigate();
 
   const handleDisconnect = () => {
     disconnectWallet();
     navigate("/");
+  };
+
+  const handleConnect = async () => {
+    await connectWallet();
   };
 
   return (
