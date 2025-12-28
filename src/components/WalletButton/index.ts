@@ -1,2 +1,0 @@
-export { WalletButton } from "./WalletButton";
-
