@@ -298,6 +298,7 @@ export class ContractService {
           });
         } else {
           events.push(null);
+        }
       });
 
       return events.filter((e) => e !== null) as Array<{
