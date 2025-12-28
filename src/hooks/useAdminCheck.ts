@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useAdmin } from "./useContractRead";
 
@@ -8,16 +8,14 @@ import { useAdmin } from "./useContractRead";
 export function useAdminCheck() {
   const { admin, isLoading: isLoadingAdmin } = useAdmin();
   const { walletInfo } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    if (admin && walletInfo?.addresses?.[2]?.address) {
-      const userAddress = walletInfo.addresses[2].address;
-      // Compare addresses (case-insensitive)
-      setIsAdmin(admin.toLowerCase() === userAddress.toLowerCase());
-    } else {
-      setIsAdmin(false);
+  const isAdmin = useMemo(() => {
+    if (!admin || !walletInfo?.addresses?.[2]?.address) {
+      return false;
     }
+    const userAddress = walletInfo.addresses[2].address;
+    // Compare addresses (case-insensitive)
+    return admin.toLowerCase() === userAddress.toLowerCase();
   }, [admin, walletInfo]);
 
   return { isAdmin, isLoadingAdmin, adminAddress: admin };
