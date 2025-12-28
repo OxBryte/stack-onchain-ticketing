@@ -19,7 +19,15 @@ export function useAllEvents() {
     setIsLoading(true);
     setError(null);
     try {
-      const allEvents = await ContractService.getAllEvents();
+      // Try to use the new get-latest-events function first
+      // If it fails, fallback to getAllEvents
+      let allEvents;
+      try {
+        allEvents = await ContractService.getLatestEvents(0);
+      } catch (latestError) {
+        console.log("Falling back to getAllEvents:", latestError);
+        allEvents = await ContractService.getAllEvents();
+      }
 
       // Parse and format events
       const formattedEvents: EventWithId[] = allEvents.map((event) => {

@@ -264,8 +264,57 @@ export class ContractService {
   }
 
   /**
+   * Get latest events (read-only)
+   * Returns up to 10 most recent events using the new contract function
+   */
+  static async getLatestEvents(
+    startFrom: number = 0
+  ): Promise<Array<{ id: number; info: any } | null>> {
+    try {
+      const result = await this.readOnlyCall<{
+        value: Array<any>;
+      }>("get-latest-events", [uintCV(startFrom)]);
+
+      if (!result?.value) {
+        return [];
+      }
+
+      // Parse the response - it returns a list of optional events
+      const events: Array<{ id: number; info: any } | null> = [];
+      const totalEvents = await this.getTotalEvents();
+      const startId =
+        startFrom === 0
+          ? totalEvents >= 10
+            ? totalEvents - 9
+            : 1
+          : startFrom;
+
+      result.value.forEach((eventOption: any, index: number) => {
+        if (eventOption && eventOption.value) {
+          const eventId = startId + index;
+          events.push({
+            id: eventId,
+            info: eventOption.value,
+          });
+        } else {
+          events.push(null);
+      });
+
+      return events.filter((e) => e !== null) as Array<{
+        id: number;
+        info: any;
+      }>;
+    } catch (error) {
+      console.error("Error fetching latest events:", error);
+      // Fallback to old method if new function fails
+      return this.getAllEvents();
+    }
+  }
+
+  /**
    * Get all events (read-only)
    * Fetches events by iterating through event IDs
+   * This is a fallback method if get-latest-events is not available
    */
   static async getAllEvents(): Promise<Array<{ id: number; info: any }>> {
     try {
