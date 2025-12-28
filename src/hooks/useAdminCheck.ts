@@ -14,9 +14,7 @@ export function useAdminCheck() {
     if (admin && walletInfo?.addresses?.[2]?.address) {
       const userAddress = walletInfo.addresses[2].address;
       // Compare addresses (case-insensitive)
-      setIsAdmin(
-        admin.toLowerCase() === userAddress.toLowerCase()
-      );
+      setIsAdmin(admin.toLowerCase() === userAddress.toLowerCase());
     } else {
       setIsAdmin(false);
     }
@@ -24,4 +22,3 @@ export function useAdminCheck() {
 
   return { isAdmin, isLoadingAdmin, adminAddress: admin };
 }
-

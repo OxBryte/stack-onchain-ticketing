@@ -8,6 +8,7 @@ export function CreateEvent() {
   const navigate = useNavigate();
   const { isConnected } = useAuth();
   const { createEvent, isLoading, error } = useCreateEvent();
+  const { isAdmin, isLoadingAdmin, adminAddress } = useAdminCheck();
 
   const [formData, setFormData] = useState({
     name: "",
