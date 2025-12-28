@@ -5,6 +5,8 @@ import { Landing } from "../pages/Landing";
 import { Dashboard } from "../pages/Dashboard";
 import { Profile } from "../pages/Profile";
 import { Settings } from "../pages/Settings";
+import { Events } from "../pages/Events";
+import { CreateEvent } from "../pages/CreateEvent";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,18 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Settings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "events",
+        element: <Events />,
+      },
+      {
+        path: "create-event",
+        element: (
+          <ProtectedRoute>
+            <CreateEvent />
           </ProtectedRoute>
         ),
       },
