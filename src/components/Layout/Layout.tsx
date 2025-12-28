@@ -1,0 +1,63 @@
+import { ReactNode } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export function Layout({ children }: LayoutProps) {
+  const { isConnected, bns, walletInfo, disconnectWallet } = useAuth();
+  const navigate = useNavigate();
+
+  const handleDisconnect = () => {
+    disconnectWallet();
+    navigate("/");
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <nav className="bg-white shadow-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-8">
+              <Link
+                to="/"
+                className="text-2xl font-bold text-indigo-600 hover:text-indigo-800"
+              >
+                TicketChain
+              </Link>
+              {isConnected && (
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 hover:text-indigo-600 transition"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </div>
+            <div className="flex items-center space-x-4">
+              {isConnected ? (
+                <>
+                  <span className="text-sm text-gray-600">
+                    {bns || walletInfo?.addresses[2]?.address || "Connected"}
+                  </span>
+                  <button
+                    onClick={handleDisconnect}
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                  >
+                    Disconnect
+                  </button>
+                </>
+              ) : (
+                <span className="text-sm text-gray-500">Not connected</span>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+      <main>{children}</main>
+    </div>
+  );
+}
+
