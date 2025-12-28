@@ -63,15 +63,26 @@ export class ContractService {
       // Convert ClarityValue to API format
       const args = functionArgs.map((arg) => clarityValueToApiFormat(arg));
 
+      const requestBody: {
+        sender: string;
+        arguments: any[];
+      } = {
+        sender: CONTRACT_CONFIG.contractAddress,
+        arguments: args,
+      };
+
+      console.log("API Call:", {
+        url: apiUrl,
+        function: functionName,
+        args: args,
+      });
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          sender: CONTRACT_CONFIG.contractAddress,
-          arguments: args,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
