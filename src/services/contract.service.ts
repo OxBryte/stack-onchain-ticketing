@@ -6,6 +6,7 @@ import {
   boolCV,
   someCV,
   noneCV,
+  ClarityValue,
 } from "@stacks/transactions";
 import { getContractIdentifier, CONTRACT_CONFIG } from "../constants/contract";
 import { clarityValueToApiFormat } from "../utils/clarity";
@@ -44,9 +45,9 @@ export class ContractService {
   /**
    * Read-only contract call using Stacks API
    */
-  static async readOnlyCall<T = any>(
+  static async readOnlyCall<T>(
     functionName: string,
-    functionArgs: any[]
+    functionArgs: ClarityValue[]
   ): Promise<T> {
     try {
       const contractId = getContractIdentifier();
