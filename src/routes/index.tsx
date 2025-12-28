@@ -1,17 +1,15 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { Landing } from "../pages/Landing";
 import { Dashboard } from "../pages/Dashboard";
+import { Profile } from "../pages/Profile";
+import { Settings } from "../pages/Settings";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Layout>
-        <Outlet />
-      </Layout>
-    ),
+    element: <Layout />,
     children: [
       {
         index: true,
@@ -22,6 +20,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         ),
       },
