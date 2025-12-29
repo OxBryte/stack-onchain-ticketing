@@ -6,8 +6,15 @@ import {
   boolCV,
   someCV,
   noneCV,
+  makeStandardSTXPostCondition,
+  FungibleConditionCode,
 } from "@stacks/transactions";
-import { getContractIdentifier, CONTRACT_CONFIG } from "../constants/contract";
+import {
+  getContractIdentifier,
+  CONTRACT_CONFIG,
+  CHRISTMAS_PRESENTS_CONFIG,
+  getChristmasPresentsContractIdentifier,
+} from "../constants/contract";
 import { clarityValueToApiFormat } from "../utils/clarity";
 
 /**
