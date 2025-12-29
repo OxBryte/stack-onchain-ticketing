@@ -348,4 +348,274 @@ export class ContractService {
       throw error;
     }
   }
+
+  /**
+   * Make a contract call for Christmas presents contract
+   */
+  private static async callChristmasPresentsContract(
+    functionName: string,
+    functionArgs: any[],
+    stxAmount?: number // Amount in micro-STX to transfer
+  ): Promise<void> {
+    try {
+      const postConditions = stxAmount
+        ? [
+            makeStandardSTXPostCondition(
+              CHRISTMAS_PRESENTS_CONFIG.contractAddress,
+              FungibleConditionCode.Equal,
+              BigInt(stxAmount)
+            ),
+          ]
+        : [];
+
+      await openContractCall({
+        contractAddress: CHRISTMAS_PRESENTS_CONFIG.contractAddress,
+        contractName: CHRISTMAS_PRESENTS_CONFIG.contractName,
+        functionName,
+        functionArgs,
+        network: CHRISTMAS_PRESENTS_CONFIG.network as any,
+        postConditions,
+        onFinish: (data) => {
+          console.log("Transaction submitted:", data);
+        },
+        onCancel: () => {
+          console.log("Transaction cancelled");
+        },
+      });
+    } catch (error) {
+      console.error(`Error calling ${functionName}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Read-only contract call for Christmas presents using Stacks API
+   */
+  private static async readOnlyCallChristmasPresents<T>(
+    functionName: string,
+    functionArgs: any[]
+  ): Promise<T> {
+    try {
+      const network =
+        CHRISTMAS_PRESENTS_CONFIG.network === "testnet"
+          ? "testnet"
+          : "mainnet";
+
+      const apiBase =
+        network === "testnet"
+          ? "https://api.testnet.hiro.so"
+          : "https://api.hiro.so";
+
+      const apiUrl = `${apiBase}/v2/contracts/call-read/${CHRISTMAS_PRESENTS_CONFIG.contractAddress}/${CHRISTMAS_PRESENTS_CONFIG.contractName}/${functionName}`;
+
+      const args = functionArgs.map((arg) => clarityValueToApiFormat(arg));
+
+      const requestBody: {
+        sender: string;
+        arguments: any[];
+      } = {
+        sender: CHRISTMAS_PRESENTS_CONFIG.contractAddress,
+        arguments: args,
+      };
+
+      console.log("API Call:", {
+        url: apiUrl,
+        function: functionName,
+        args: args,
+      });
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`API Error Response (${response.status}):`, errorText);
+        throw new Error(`API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = (await response.json()) as T;
+      return data as T;
+    } catch (error) {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        console.error(
+          `Network error calling ${functionName}. This could be due to:`,
+          "\n1. CORS issues (if running locally)",
+          "\n2. Network connectivity",
+          "\n3. Incorrect API endpoint",
+          "\n4. Contract not deployed or incorrect address"
+        );
+        throw new Error(
+          `Failed to fetch: ${functionName}. Check console for details.`
+        );
+      }
+      console.error(`Error in read-only call ${functionName}:`, error);
+      throw error;
+    }
+  }
+
+  // ========== Christmas Presents Methods ==========
+
+  /**
+   * Create a Christmas present with STX amount, title, and password
+   */
+  static async createPresent(params: {
+    title: string;
+    amount: number; // Amount in micro-STX
+    password: string;
+  }): Promise<void> {
+    await this.callChristmasPresentsContract(
+      "create-present",
+      [
+        stringAsciiCV(params.title),
+        uintCV(params.amount),
+        stringAsciiCV(params.password),
+      ],
+      params.amount // Transfer STX as part of the transaction
+    );
+  }
+
+  /**
+   * Claim a present using the password
+   */
+  static async claimPresent(
+    presentId: number,
+    password: string
+  ): Promise<void> {
+    await this.callChristmasPresentsContract("claim-present", [
+      uintCV(presentId),
+      stringAsciiCV(password),
+    ]);
+  }
+
+  /**
+   * Withdraw STX for a claimed present
+   */
+  static async withdrawPresent(presentId: number): Promise<void> {
+    await this.callChristmasPresentsContract("withdraw-present", [
+      uintCV(presentId),
+    ]);
+  }
+
+  /**
+   * Get present by ID (read-only)
+   */
+  static async getPresentById(presentId: number): Promise<any> {
+    return this.readOnlyCallChristmasPresents("get-present-by-id", [
+      uintCV(presentId),
+    ]);
+  }
+
+  /**
+   * Get all presents (read-only)
+   * Returns up to 10 most recent presents
+   */
+  static async getAllPresents(
+    startFrom: number = 0
+  ): Promise<Array<{ id: number; info: any } | null>> {
+    try {
+      const result = await this.readOnlyCallChristmasPresents<{
+        value: Array<any>;
+      }>("get-all-presents", [uintCV(startFrom)]);
+
+      if (!result?.value) {
+        return [];
+      }
+
+      // Parse the response - it returns a list of optional presents
+      const presents: Array<{ id: number; info: any } | null> = [];
+      const stats = await this.getPresentStats();
+      const totalPresents = Number(stats["total-presents"]);
+      const startId =
+        startFrom === 0
+          ? totalPresents >= 10
+            ? totalPresents - 9
+            : 1
+          : startFrom;
+
+      result.value.forEach((presentOption: any, index: number) => {
+        if (presentOption && presentOption.value) {
+          const presentId = startId + index;
+          presents.push({
+            id: presentId,
+            info: presentOption.value,
+          });
+        } else {
+          presents.push(null);
+        }
+      });
+
+      return presents.filter((p) => p !== null) as Array<{
+        id: number;
+        info: any;
+      }>;
+    } catch (error) {
+      console.error("Error fetching all presents:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get presents by creator (read-only)
+   */
+  static async getPresentsByCreator(
+    creator: string,
+    startFrom: number = 0
+  ): Promise<Array<{ id: number; info: any } | null>> {
+    try {
+      const result = await this.readOnlyCallChristmasPresents<{
+        value: Array<any>;
+      }>("get-presents-by-creator", [principalCV(creator), uintCV(startFrom)]);
+
+      if (!result?.value) {
+        return [];
+      }
+
+      // Parse similar to getAllPresents
+      const presents: Array<{ id: number; info: any } | null> = [];
+      const stats = await this.getPresentStats();
+      const totalPresents = Number(stats["total-presents"]);
+      const startId =
+        startFrom === 0
+          ? totalPresents >= 10
+            ? totalPresents - 9
+            : 1
+          : startFrom;
+
+      result.value.forEach((presentOption: any, index: number) => {
+        if (presentOption && presentOption.value) {
+          const presentId = startId + index;
+          presents.push({
+            id: presentId,
+            info: presentOption.value,
+          });
+        }
+      });
+
+      return presents.filter((p) => p !== null) as Array<{
+        id: number;
+        info: any;
+      }>;
+    } catch (error) {
+      console.error("Error fetching presents by creator:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get present statistics (read-only)
+   */
+  static async getPresentStats(): Promise<{ "total-presents": bigint }> {
+    const result = await this.readOnlyCallChristmasPresents<{
+      value: { "total-presents": string };
+    }>("get-stats", []);
+
+    return {
+      "total-presents": BigInt(result.value["total-presents"] || "0"),
+    };
+  }
 }
