@@ -448,21 +448,21 @@ export class ContractService {
 
   /**
    * Create a Christmas present with STX amount, title, and password
+   * IMPORTANT: The user must transfer STX to the contract address BEFORE calling this function.
+   * The amount should match the params.amount value (in micro-STX).
    */
   static async createPresent(params: {
     title: string;
     amount: number; // Amount in micro-STX
     password: string;
   }): Promise<void> {
-    await this.callChristmasPresentsContract(
-      "create-present",
-      [
-        stringAsciiCV(params.title),
-        uintCV(params.amount),
-        stringAsciiCV(params.password),
-      ],
-      params.amount // Transfer STX as part of the transaction
-    );
+    // Note: STX transfer must be done separately before calling this function
+    // The contract expects STX to already be in the contract address
+    await this.callChristmasPresentsContract("create-present", [
+      stringAsciiCV(params.title),
+      uintCV(params.amount),
+      stringAsciiCV(params.password),
+    ]);
   }
 
   /**
