@@ -382,9 +382,7 @@ export class ContractService {
   ): Promise<T> {
     try {
       const network =
-        CHRISTMAS_PRESENTS_CONFIG.network === "testnet"
-          ? "testnet"
-          : "mainnet";
+        CHRISTMAS_PRESENTS_CONFIG.network === "testnet" ? "testnet" : "mainnet";
 
       const apiBase =
         network === "testnet"
