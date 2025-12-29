@@ -318,7 +318,6 @@ export class ContractService {
   static async getAllEvents(): Promise<Array<{ id: number; info: any }>> {
     try {
       const totalEvents = await this.getTotalEvents();
-      const events: Array<{ id: number; info: any }> = [];
 
       // Fetch events in parallel
       const promises = [];
