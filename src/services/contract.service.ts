@@ -346,30 +346,21 @@ export class ContractService {
 
   /**
    * Make a contract call for Christmas presents contract
+   * Note: For create-present, the user must transfer STX to the contract address
+   * before calling this function. The STX transfer should be done as a separate
+   * transaction or using postConditions (implementation depends on @stacks/connect version)
    */
   private static async callChristmasPresentsContract(
     functionName: string,
-    functionArgs: any[],
-    stxAmount?: number // Amount in micro-STX to transfer
+    functionArgs: any[]
   ): Promise<void> {
     try {
-      const postConditions = stxAmount
-        ? [
-            makeStandardSTXPostCondition(
-              CHRISTMAS_PRESENTS_CONFIG.contractAddress,
-              FungibleConditionCode.Equal,
-              BigInt(stxAmount)
-            ),
-          ]
-        : [];
-
       await openContractCall({
         contractAddress: CHRISTMAS_PRESENTS_CONFIG.contractAddress,
         contractName: CHRISTMAS_PRESENTS_CONFIG.contractName,
         functionName,
         functionArgs,
         network: CHRISTMAS_PRESENTS_CONFIG.network as any,
-        postConditions,
         onFinish: (data) => {
           console.log("Transaction submitted:", data);
         },
