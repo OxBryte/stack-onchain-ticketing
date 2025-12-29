@@ -28,3 +28,11 @@ export { useAdminCheck } from "./useAdminCheck";
 
 // Wallet hook
 export { useWallet } from "./useWallet";
+
+// Christmas Presents hooks
+export {
+  useCreatePresent,
+  useClaimPresent,
+  useWithdrawPresent,
+} from "./useChristmasPresents";
+export { useAllPresents } from "./useAllPresents";
