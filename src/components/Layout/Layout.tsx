@@ -27,6 +27,12 @@ export function Layout() {
               >
                 Events
               </Link>
+              <Link
+                to="/christmas-presents"
+                className="text-gray-700 hover:text-indigo-600 transition"
+              >
+                🎄 Presents
+              </Link>
               {isConnected && (
                 <>
                   <Link

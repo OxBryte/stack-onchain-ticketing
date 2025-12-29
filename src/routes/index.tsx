@@ -7,6 +7,7 @@ import { Profile } from "../pages/Profile";
 import { Settings } from "../pages/Settings";
 import { Events } from "../pages/Events";
 import { CreateEvent } from "../pages/CreateEvent";
+import { ChristmasPresents } from "../pages/ChristmasPresents";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
             <CreateEvent />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "christmas-presents",
+        element: <ChristmasPresents />,
       },
     ],
   },
