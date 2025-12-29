@@ -81,7 +81,7 @@ export class ContractService {
       });
 
       // Custom replacer to handle BigInt values
-      const jsonString = JSON.stringify(requestBody, (key, value) => {
+      const jsonString = JSON.stringify(requestBody, (_key, value) => {
         if (typeof value === "bigint") {
           return value.toString();
         }
@@ -416,7 +416,7 @@ export class ContractService {
       });
 
       // Custom replacer to handle BigInt values
-      const jsonString = JSON.stringify(requestBody, (key, value) => {
+      const jsonString = JSON.stringify(requestBody, (_key, value) => {
         if (typeof value === "bigint") {
           return value.toString();
         }
