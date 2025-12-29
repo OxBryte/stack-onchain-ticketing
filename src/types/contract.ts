@@ -40,3 +40,29 @@ export interface UpdateEventParams {
   price?: number; // Price in micro-STX
 }
 
+// Christmas Presents Types
+export interface PresentInfo {
+  creator: string;
+  title: string;
+  amount: bigint;
+  "password-hash": string;
+  claimed: boolean;
+  claimer: string;
+  "created-at": bigint;
+}
+
+export interface CreatePresentParams {
+  title: string;
+  amount: number; // Amount in micro-STX
+  password: string;
+}
+
+export interface ClaimPresentParams {
+  presentId: number;
+  password: string;
+}
+
+export interface PresentStats {
+  "total-presents": bigint;
+}
+
