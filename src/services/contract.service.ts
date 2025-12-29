@@ -80,12 +80,20 @@ export class ContractService {
         args: args,
       });
 
+      // Custom replacer to handle BigInt values
+      const jsonString = JSON.stringify(requestBody, (key, value) => {
+        if (typeof value === "bigint") {
+          return value.toString();
+        }
+        return value;
+      });
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody),
+        body: jsonString,
       });
 
       if (!response.ok) {
